@@ -77,6 +77,10 @@ client.on('message', message => {
     if(command === 'help') {
       message.channel.send('**About KTG Crypto Bot (prefix ~)**\nCommands:\n`help` - command info\n`rvol` - gets 21 day average of volume and compares it to prior days (~rvol TICKER/USD)\n`gas` - fetches gas fee prices from https://docs.ethgasstation.info/gas-price#gas-price')
     }
+    // Sleep
+    if(command === 'ssheeeesh') {
+      message.channel.send('HEY THERE YOU WHIPPER SNAPPER YOU BETTER GET TO BED!!!')
+    }
     //Gas Fees ETH
     if(command === 'gas') {
       const http = require("https");
