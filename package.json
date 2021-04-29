@@ -1,0 +1,27 @@
+{
+  "name": "smb",
+  "version": "1.0.0",
+  "description": "SMB Crypto Bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/realBlueVein/crypto-bot.git"
+  },
+  "author": "James Slattery",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/realBlueVein/crypto-bot/issues"
+  },
+  "homepage": "https://github.com/realBlueVein/crypto-bot#readme",
+  "dependencies": {
+    "apollo-boost": "^0.4.9",
+    "apollo-client": "^2.6.10",
+    "discord.js": "^12.5.3",
+    "graphql": "^15.5.0",
+    "graphql-tag": "^2.11.0",
+    "moment": "^2.29.1"
+  }
+}
