@@ -107,7 +107,7 @@ client.on('message', message => {
           const body = Buffer.concat(chunks);
           let data = JSON.parse(body);
 
-          message.channel.send("fast: " + data.fast + "\nfastest: " + data.fastest + "\nsafeLow: " + data.safeLow + "\naverage: " + data.average + "\nblock_time: " + data.block_time + "\nblockNum: " + data.blockNum + "\nspeed: " + data.speed + "\nsafeLowWait: " + data.safeLowWait + "\navgWait: " + data.avgWait + "\nfastWait: " + data.fastWait + "\nfastestWait: " + data.fastestWait)
+          message.channel.send("fast: " + data.fast/10 + "\nfastest: " + data.fastest/10 + "\nsafeLow: " + data.safeLow/10 + "\naverage: " + data.average/10 + "\nblock_time: " + data.block_time + "\nblockNum: " + data.blockNum + "\nspeed: " + data.speed + "\nsafeLowWait: " + data.safeLowWait + "\navgWait: " + data.avgWait + "\nfastWait: " + data.fastWait + "\nfastestWait: " + data.fastestWait)
 
         });
       });
