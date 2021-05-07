@@ -22,7 +22,7 @@ function getLiquidations() {
 
     const options = {
       "method": "GET",
-      "hostname": "",
+      "hostname": "fapi.bybt.com",
       "port": null,
       "path": "/api/futures/liquidation/order?side=&exName=&symbol=&pageSize=10&pageNum=1&volUsd=1000000",
       "headers": {
@@ -54,7 +54,7 @@ function getLiquidations() {
              }
             t= moment.utc(d.data.list[i].createTime).utcOffset('-0400').format('HH:mm')
 
-            let payload = t + ": " + d.data.list[i].exchangeName + " " + d.data.list[i].originalSymbol + " " + side + " Liquidation: " + d.data.list[i].amount + " " + d.data.list[i].symbol + " ($" + (d.data.list[i].volUsd/1000).toFixed(2)  + "K) at $" + d.data.list[i].price;
+            let payload = t + ": " + d.data.list[i].exchangeName + " " + d.data.list[i].originalSymbol + " " + side + " Liquidation: " + d.data.list[i].amount + " " + d.data.list[i].symbol + " ($" + (d.data.list[i].volUsd/1000000).toFixed(2)  + "M) at $" + d.data.list[i].price;
             client.channels.cache.get('835153133100728370').send(payload);
 
             lastFetch.push(d.data.list[i].id);
