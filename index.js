@@ -22,9 +22,9 @@ function getLiquidations() {
 
     const options = {
       "method": "GET",
-      "hostname": "fapi.bybt.com",
+      "hostname": "",
       "port": null,
-      "path": "/api/futures/liquidation/order?side=&exName=&symbol=&pageSize=10&pageNum=1&volUsd=100000",
+      "path": "/api/futures/liquidation/order?side=&exName=&symbol=&pageSize=10&pageNum=1&volUsd=1000000",
       "headers": {
         "Content-Length": "0"
       }
