@@ -6,7 +6,82 @@ const { off } = require('process');
 
 const client = new Discord.Client();
 const prefix = '~'
+///////////////////////
+// Liquidator 5000   //
+///////////////////////
+let lastFetch = [];
+// Run Every 30 Seconds
+function getLiquidations() {
+  // Reset array if it gets over 50 IDs stored. 
+  if (lastFetch.length > 100) {
+    lastFetch = []; 
+  }
+  
+  // Get Last 10 Liquidations
+  const http = require("https");
 
+    const options = {
+      "method": "GET",
+      "hostname": "fapi.bybt.com",
+      "port": null,
+      "path": "/api/futures/liquidation/order?side=&exName=&symbol=&pageSize=10&pageNum=1&volUsd=100000",
+      "headers": {
+        "Content-Length": "0"
+      }
+    };
+
+    const req = http.request(options, function (res) {
+      const chunks = [];
+
+      res.on("data", function (chunk) {
+        chunks.push(chunk);
+      });
+
+      res.on("end", function () {
+        const body = Buffer.concat(chunks);
+        d = JSON.parse(body);
+        if(Object.values(d).length > 1) {
+          for (i = 0; i < Object.values(d).length; i++){
+            // If ID has not already been posted.... then post.
+            if (!(lastFetch.includes(d.data.list[i].id))){
+              // send messgae to liquidations w/ data
+             let side = d.data.list[i].side;
+             if (side = 2) {
+               side = 'SHORT';
+             }
+             if (side = 1) {
+               side = 'LONG';
+             }
+            t= moment.utc(d.data.list[i].createTime).utcOffset('-0400').format('HH:mm')
+
+            let payload = t + ": " + d.data.list[i].exchangeName + " " + d.data.list[i].originalSymbol + " " + side + " Liquidation: " + d.data.list[i].amount + " " + d.data.list[i].symbol + " ($" + (d.data.list[i].volUsd/1000).toFixed(2)  + "K) at $" + d.data.list[i].price;
+            client.channels.cache.get('835153133100728370').send(payload);
+
+            lastFetch.push(d.data.list[i].id);
+            }
+            /*else {
+              // Remove the already posted ID from the List (keep it clean)
+              let index = lastFetch.indexOf(d.data.list[i].id);
+              lastFetch.splice(index,1);
+            }*/
+            // Store IDs for next fetch.
+            
+          }
+        }
+
+
+
+      });
+    });
+
+    req.end();
+}
+setInterval(getLiquidations, 5000); // Run every 30 seconds
+
+
+///////////////////////
+// Command Responses //
+///////////////////////
 client.on('message', message => {
     if(!message.content.startsWith(prefix) || message.author.bot) return;
 
