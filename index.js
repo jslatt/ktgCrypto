@@ -45,11 +45,11 @@ function getLiquidationsETC() {
             // If ID has not already been posted.... then post.
             if (!(lastFetch.includes(d.data.list[i].id))){
               // send messgae to liquidations w/ data
-             let side = d.data.list[i].side;
-             if (side = 2) {
+             let side = "VOID";
+             if (d.data.list[i].side > 1) {
                side = 'SHORT';
              }
-             if (side = 1) {
+             if (d.data.list[i].side < 2) {
                side = 'LONG';
              }
             t= moment.utc(d.data.list[i].createTime).utcOffset('-0400').format('HH:mm')
@@ -112,13 +112,13 @@ function getLiquidationsETH() {
             // If ID has not already been posted.... then post.
             if (!(lastFetch.includes(d.data.list[i].id))){
               // send messgae to liquidations w/ data
-             let side = d.data.list[i].side;
-             if (side = 2) {
-               side = 'SHORT';
-             }
-             if (side = 1) {
-               side = 'LONG';
-             }
+              let side = "VOID";
+              if (d.data.list[i].side > 1) {
+                side = 'SHORT';
+              }
+              if (d.data.list[i].side < 2) {
+                side = 'LONG';
+              }
             t= moment.utc(d.data.list[i].createTime).utcOffset('-0400').format('HH:mm')
 
             let payload = t + ": " + d.data.list[i].exchangeName + " " + d.data.list[i].originalSymbol + " " + side + " Liquidation: " + d.data.list[i].amount + " " + d.data.list[i].symbol + " ($" + (d.data.list[i].volUsd/1000000).toFixed(2)  + "M) at $" + d.data.list[i].price;
@@ -478,7 +478,7 @@ client.on('message', message => {
     }
 })
 //Prod
-client.login('NzYxMDU4ODI0MTczMTI1NjYz.X3VFQw.JylV4hUkj0KFania0JIeHfo6OLw');
+//client.login('NzYxMDU4ODI0MTczMTI1NjYz.X3VFQw.JylV4hUkj0KFania0JIeHfo6OLw');
 //Dev
-//client.login('ODM4MTk3MjE2MDUyMTE3NTI1.YI3l_Q.MT-sgfwNBVi3myP1lp-adR6Xxrw');
+client.login('ODM4MTk3MjE2MDUyMTE3NTI1.YI3l_Q.MT-sgfwNBVi3myP1lp-adR6Xxrw');
 
