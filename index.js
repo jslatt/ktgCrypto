@@ -11,7 +11,7 @@ const prefix = '~'
 ///////////////////////
 let lastFetch = [];
 // Run Every 30 Seconds
-function getLiquidations() {
+function getLiquidations(sym) {
   // Reset array if it gets over 50 IDs stored. 
   if (lastFetch.length > 100) {
     lastFetch = []; 
@@ -24,7 +24,7 @@ function getLiquidations() {
       "method": "GET",
       "hostname": "fapi.bybt.com",
       "port": null,
-      "path": "/api/futures/liquidation/order?side=&exName=&symbol=&pageSize=10&pageNum=1&volUsd=1000000",
+      "path": "/api/futures/liquidation/order?side=&exName=&symbol=" + sym + "&pageSize=10&pageNum=1&volUsd=1000000",
       "headers": {
         "Content-Length": "0"
       }
@@ -76,8 +76,8 @@ function getLiquidations() {
 
     req.end();
 }
-setInterval(getLiquidations, 5000); // Run every 30 seconds
-
+setInterval(getLiquidations("ETH"), 5000); // Run every 30 seconds
+setInterval(getLiquidations("ETC"), 5000);
 
 ///////////////////////
 // Command Responses //
