@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const moment = require('moment');
 const https = require('https');
 const { off } = require('process');
+const { now } = require('moment');
 
 
 const client = new Discord.Client();
@@ -12,7 +13,7 @@ const prefix = '~'
 let lastFetch = [];
 // Run Every 30 Seconds
 function getLiquidationsETC() {
-  // Reset array if it gets over 50 IDs stored. 
+  // Reset array if it gets over 100 IDs stored. 
   if (lastFetch.length > 100) {
     lastFetch = []; 
   }
@@ -40,46 +41,39 @@ function getLiquidationsETC() {
       res.on("end", function () {
         const body = Buffer.concat(chunks);
         d = JSON.parse(body);
-        if(Object.values(d).length > 1) {
+        if(d.success) {
           for (i = 0; i < Object.values(d).length; i++){
             // If ID has not already been posted.... then post.
-            if (!(lastFetch.includes(d.data.list[i].id))){
-              // send messgae to liquidations w/ data
-             let side = "VOID";
-             if (d.data.list[i].side > 1) {
-               side = 'SHORT';
-             }
-             if (d.data.list[i].side < 2) {
-               side = 'LONG';
-             }
-            t= moment.utc(d.data.list[i].createTime).utcOffset('-0400').format('HH:mm')
-
-            let payload = t + ": " + d.data.list[i].exchangeName + " " + d.data.list[i].originalSymbol + " " + side + " Liquidation: " + d.data.list[i].amount + " " + d.data.list[i].symbol + " ($" + (d.data.list[i].volUsd/1000000).toFixed(2)  + "M) at $" + d.data.list[i].price;
-            client.channels.cache.get('835153133100728370').send(payload);
-
-            lastFetch.push(d.data.list[i].id);
+            if (d.data.list[i] != undefined) {
+              if (!(lastFetch.includes(d.data.list[i].id))){
+                // send messgae to liquidations w/ data
+               let side = "VOID";
+               if (d.data.list[i].side > 1) {
+                 side = 'SHORT';
+               }
+               if (d.data.list[i].side < 2) {
+                 side = 'LONG';
+               }
+              let t = moment.utc(d.data.list[i].createTime).utcOffset('-0400').format('HH:mm')
+  
+              let payload = t + ": " + d.data.list[i].exchangeName + " " + d.data.list[i].originalSymbol + " " + side + " Liquidation: " + d.data.list[i].amount + " " + d.data.list[i].symbol + " ($" + (d.data.list[i].volUsd/1000000).toFixed(2)  + "M) at $" + d.data.list[i].price;
+              client.channels.cache.get('835153133100728370').send(payload);
+    
+              lastFetch.push(d.data.list[i].id);
+  
+              }
             }
-            /*else {
-              // Remove the already posted ID from the List (keep it clean)
-              let index = lastFetch.indexOf(d.data.list[i].id);
-              lastFetch.splice(index,1);
-            }*/
-            // Store IDs for next fetch.
-            
           }
         }
-
-
-
       });
     });
 
     req.end();
 }
-setInterval(getLiquidationsETC, 5000); // Run every 30 seconds
+setInterval(getLiquidationsETC, 10000); // Run every 30 seconds
 
 function getLiquidationsETH() {
-  // Reset array if it gets over 50 IDs stored. 
+  // Reset array if it gets over 100 IDs stored. 
   if (lastFetch.length > 100) {
     lastFetch = []; 
   }
@@ -107,43 +101,36 @@ function getLiquidationsETH() {
       res.on("end", function () {
         const body = Buffer.concat(chunks);
         d = JSON.parse(body);
-        if(Object.values(d).length > 1) {
+        if(d.success) {
           for (i = 0; i < Object.values(d).length; i++){
             // If ID has not already been posted.... then post.
-            if (!(lastFetch.includes(d.data.list[i].id))){
-              // send messgae to liquidations w/ data
-              let side = "VOID";
-              if (d.data.list[i].side > 1) {
-                side = 'SHORT';
+            if (d.data.list[i] != undefined) {
+              if (!(lastFetch.includes(d.data.list[i].id))){
+                // send messgae to liquidations w/ data
+               let side = "VOID";
+               if (d.data.list[i].side > 1) {
+                 side = 'SHORT';
+               }
+               if (d.data.list[i].side < 2) {
+                 side = 'LONG';
+               }
+              let t = moment.utc(d.data.list[i].createTime).utcOffset('-0400').format('HH:mm')
+  
+              let payload = t + ": " + d.data.list[i].exchangeName + " " + d.data.list[i].originalSymbol + " " + side + " Liquidation: " + d.data.list[i].amount + " " + d.data.list[i].symbol + " ($" + (d.data.list[i].volUsd/1000000).toFixed(2)  + "M) at $" + d.data.list[i].price;
+              client.channels.cache.get('835153133100728370').send(payload);
+    
+              lastFetch.push(d.data.list[i].id);
+  
               }
-              if (d.data.list[i].side < 2) {
-                side = 'LONG';
-              }
-            t= moment.utc(d.data.list[i].createTime).utcOffset('-0400').format('HH:mm')
-
-            let payload = t + ": " + d.data.list[i].exchangeName + " " + d.data.list[i].originalSymbol + " " + side + " Liquidation: " + d.data.list[i].amount + " " + d.data.list[i].symbol + " ($" + (d.data.list[i].volUsd/1000000).toFixed(2)  + "M) at $" + d.data.list[i].price;
-            client.channels.cache.get('835153133100728370').send(payload);
-
-            lastFetch.push(d.data.list[i].id);
             }
-            /*else {
-              // Remove the already posted ID from the List (keep it clean)
-              let index = lastFetch.indexOf(d.data.list[i].id);
-              lastFetch.splice(index,1);
-            }*/
-            // Store IDs for next fetch.
-            
           }
         }
-
-
-
       });
     });
 
     req.end();
 }
-setInterval(getLiquidationsETH, 5000); // Run every 30 seconds
+setInterval(getLiquidationsETH, 10000); // Run every 30 seconds
 
 
 
@@ -156,6 +143,62 @@ client.on('message', message => {
 
     const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLocaleLowerCase();
+
+    //ATR
+    if(command === 'atr' && args[0] != undefined) {
+      message.channel.send('Fetching relative volume for ' + args[0].toUpperCase() + '.')
+      
+      const http = require("https");
+
+      // 21 Days Before Today YYYY-MM-DD
+      dFix = moment().subtract(15, 'days').format('YYYY-MM-DD')
+
+      let path = "/v1/ohlcv/" + args[0].toUpperCase() + "/history?period_id=1DAY&time_start=" + dFix + "T00%3A00%3A00";
+
+      const options = {
+        "method": "GET",
+        "hostname": "rest.coinapi.io",
+        "port": null,
+        "path": path,
+        "headers": {
+          "X-CoinAPI-Key": "FDE9F5CF-6150-4E05-90A3-69B59255032B",
+          "Content-Length": "0"
+        }
+      };
+      const req = http.request(options, function (res) {
+        const chunks = [];
+      
+        res.on("data", function (chunk) {
+          chunks.push(chunk);
+        });
+      
+        res.on("end", function () {
+          const body = Buffer.concat(chunks);
+          let data = JSON.parse(body);
+          let trueRanges = [];
+          //data[0].volume_traded
+          if(Object.values(data).length > 1) {
+            for (i = 0; i < Object.values(data).length; i++){
+              // Calculate True Range
+              let tr = Math.max((data[i].price_high-price_low),Math.abs(data[i].price_high-data[i-1].price_close),Math.abs(data[i].price_low-data[i-1].price_close));
+              trueRanges.push(tr);
+
+            }
+            let atr = trueRanges.reduce((a, b) => a + b, 0) / 14;
+            message.channel.send(atr);
+            
+          }
+          else {
+            message.channel.send("Coin not supported by API. `Data length of 0`")
+          }
+
+
+        });
+      });
+      
+      req.end();
+
+  }
 
     // RVol
     if(command === 'rvol' && args[0] != undefined) {
