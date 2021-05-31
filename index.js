@@ -43,7 +43,7 @@ function getLiquidationsETC() {
       res.on("end", function () {
         const body = Buffer.concat(chunks);
         d = JSON.parse(body);
-        if(d.success && typeof d.data.list[0].id != "undefined") {
+        if(d.success) {
           for (i = 0; i < Object.values(d).length; i++){
             // If ID has not already been posted.... then post.
               if (!(lastFetch.includes(d.data.list[i].id))){
