@@ -27,7 +27,7 @@ function getLiquidationsETC() {
       "method": "GET",
       "hostname": "fapi.bybt.com",
       "port": null,
-      "path": "/api/futures/liquidation/order?side=&exName=&symbol=ETC&pageSize=10&pageNum=1&volUsd=1000000",
+      "path": "/api/futures/liquidation/order?side=&exName=&symbol=ETC&pageSize=20&pageNum=1&volUsd=100000",
       "headers": {
         "Content-Length": "0"
       }
@@ -43,6 +43,7 @@ function getLiquidationsETC() {
       res.on("end", function () {
         const body = Buffer.concat(chunks);
         d = JSON.parse(body);
+
         if(d.success) {
           for (i = 0; i < Object.values(d).length; i++){
             // If ID has not already been posted.... then post.
