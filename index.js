@@ -68,7 +68,7 @@ function getLiquidationsETC() {
         }
       });
     });
-
+ 
     req.end();
 }
 setInterval(getLiquidationsETC, 10000); // Run every 30 seconds
