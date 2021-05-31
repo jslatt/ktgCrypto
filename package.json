@@ -22,6 +22,8 @@
     "discord.js": "^12.5.3",
     "graphql": "^15.5.0",
     "graphql-tag": "^2.11.0",
-    "moment": "^2.29.1"
+    "jsonata": "^1.8.4",
+    "moment": "^2.29.1",
+    "sort-json-array": "^0.1.7"
   }
 }

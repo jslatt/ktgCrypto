@@ -3,6 +3,8 @@ const moment = require('moment');
 const https = require('https');
 const { off } = require('process');
 const { now } = require('moment');
+var jsonata = require("jsonata");
+const { count } = require('console');
 
 
 const client = new Discord.Client();
@@ -44,7 +46,6 @@ function getLiquidationsETC() {
         if(d.success) {
           for (i = 0; i < Object.values(d).length; i++){
             // If ID has not already been posted.... then post.
-            if (d.data.list[i] != undefined) {
               if (!(lastFetch.includes(d.data.list[i].id))){
                 // send messgae to liquidations w/ data
                let side = "VOID";
@@ -62,7 +63,7 @@ function getLiquidationsETC() {
               lastFetch.push(d.data.list[i].id);
   
               }
-            }
+            
           }
         }
       });
@@ -117,7 +118,7 @@ function getLiquidationsETH() {
               let t = moment.utc(d.data.list[i].createTime).utcOffset('-0400').format('HH:mm')
   
               let payload = t + ": " + d.data.list[i].exchangeName + " " + d.data.list[i].originalSymbol + " " + side + " Liquidation: " + d.data.list[i].amount + " " + d.data.list[i].symbol + " ($" + (d.data.list[i].volUsd/1000000).toFixed(2)  + "M) at $" + d.data.list[i].price;
-              client.channels.cache.get('835153133100728370').send(payload);
+              //client.channels.cache.get('835153133100728370').send(payload);
     
               lastFetch.push(d.data.list[i].id);
   
@@ -143,6 +144,54 @@ client.on('message', message => {
 
     const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLocaleLowerCase();
+
+  // Messari Assets
+  if(command === 'top' && args[0] != undefined) {
+    const http = require("https");
+
+    const path = "/assets?quote=usd&sort=performance&performanceWindow=" + args[0];
+
+    const options = {
+      "method": "GET",
+      "hostname": "billboard.service.cryptowat.ch",
+      "port": null,
+      "path": path,
+      "headers": {
+        "Content-Length": "0"
+      }
+    };
+    
+    const req = http.request(options, function (res) {
+      const chunks = [];
+    
+      res.on("data", function (chunk) {
+        chunks.push(chunk);
+      });
+    
+      res.on("end", function () {
+        const body = Buffer.concat(chunks);
+        let d = JSON.parse(body);
+        message.channel.send("Top 10 Crypto Assets by " + args[0].toUpperCase() + " % Change:")
+
+      
+        let counter = 0;
+        let i = 0;
+        let payload = [];
+        while (counter < 10) {
+          if (!(d["result"]["rows"][i].name.toString().includes("3X"))) {
+            payload.push(d["result"]["rows"][i].symbol + " (" + d["result"]["rows"][i].name + ")");
+            counter++;
+          }
+          i++;
+        }
+        message.channel.send(payload);
+
+      });
+    });
+    
+    req.end();
+  }
+
 
     //ATR
     if(command === 'atr' && args[0] != undefined) {
