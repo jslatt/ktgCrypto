@@ -14,7 +14,7 @@ const prefix = '~'
 ///////////////////////
 let lastFetch = [];
 // Run Every 30 Seconds
-function getLiquidationsETC() {
+/*function getLiquidationsETC() {
   // Reset array if it gets over 100 IDs stored. 
   if (lastFetch.length > 100) {
     lastFetch = []; 
@@ -73,6 +73,8 @@ function getLiquidationsETC() {
     req.end();
 }
 setInterval(getLiquidationsETC, 10000); // Run every 30 seconds
+*/
+
 
 function getLiquidationsETH() {
   // Reset array if it gets over 100 IDs stored. 
