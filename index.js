@@ -427,8 +427,5 @@ client.on('message', message => {
 
   }
 })
-//Prod
-client.login('NzYxMDU4ODI0MTczMTI1NjYz.X3VFQw.JylV4hUkj0KFania0JIeHfo6OLw');
-//Dev
-//client.login('ODM4MTk3MjE2MDUyMTE3NTI1.YI3l_Q.MT-sgfwNBVi3myP1lp-adR6Xxrw');
 
+client.login('');
